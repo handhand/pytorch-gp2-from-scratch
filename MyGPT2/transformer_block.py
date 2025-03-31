@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 from MyGPT2.layer_norm import LayerNorm
 from MyGPT2.multihead_attention import MultiheadAttention
@@ -12,7 +11,7 @@ class TransformerBlock(nn.Module):
     def __init__(self, cfg):
         super().__init__()
         emb_dim = cfg["emb_dim"]
-        self.layer_norm1 = LayerNorm(emb_dim)
+        self.layer_norm1 = LayerNorm(emb_dim) # use our custom LayerNorm, NOT nn.LayerNorm
         heads = cfg["n_heads"]
         emb_dim = cfg["emb_dim"]
         assert (emb_dim % heads) == 0, 'Embedding必须可以被head整除，用来计算head的dimension'
@@ -25,7 +24,7 @@ class TransformerBlock(nn.Module):
             context_length=cfg["context_length"]
         )
         self.drop_out = nn.Dropout(cfg["drop_rate"])
-        self.layer_norm2 = nn.LayerNorm(emb_dim)
+        self.layer_norm2 = LayerNorm(emb_dim)
         self.feed_forward = FeedForward(emb_dim=emb_dim)
 
     def forward(self, x):
