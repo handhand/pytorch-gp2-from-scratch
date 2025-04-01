@@ -15,6 +15,6 @@ class LayerNorm(torch.nn.Module):
         # 注意这里dim = -1，即计算平均值的是embedding的维度，
         # 是一个token自己的各个embedding之间进行normalization，而不是batch normalization
         mean = x.mean(dim = -1, keepdim = True) # shape = [batch, token, 1], x - mean时1可以broadcast
-        var = x.var(dim = -1, keepdim = True, unbiased = False)
+        var = x.var(dim = -1, keepdim = True)
         x = (x - mean)/torch.sqrt(var + self.eps)
-        return x * self.scale - self.shift
+        return x * self.scale + self.shift

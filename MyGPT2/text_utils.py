@@ -2,13 +2,13 @@ import torch
 
 def text_to_ids(text, tokenizer):
     encoded = tokenizer.encode(text, allowed_special={'<|endoftext|>'})
-    # 加多一个batch的维度，用于兼容LLM的输入shape
     encoded_tensor = torch.tensor(encoded).unsqueeze(0)
+    # 加多一个batch的维度，用于兼容LLM的输入shape
     return encoded_tensor
 
-
-def ids_to_text(ids, tokenizer):
-    return tokenizer.decode(ids.squeeze(0).tolist())
+def ids_to_text(token_ids, tokenizer):
+    flat = token_ids.squeeze(0) # remove batch dimension
+    return tokenizer.decode(flat.tolist())
 
 
 def generate_text_simple(
