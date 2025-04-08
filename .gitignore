@@ -175,3 +175,6 @@ cython_debug/
 
 # Do not save the pretrained weights
 gpt2
+
+# Do not save the trained weights
+*.pth

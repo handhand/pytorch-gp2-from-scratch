@@ -15,12 +15,15 @@ def generate_text_simple(
         model,
         idx,
         max_new_tokens,
-        context_size):
+        context_size,
+        end_of_text_id = 50256):
     for _ in range(max_new_tokens):
         idx_cond = idx[:, -context_size:]
         with torch.no_grad():
             logits = model(idx_cond)
         next_id = torch.argmax(logits[:, -1, :], dim=-1, keepdim=True) # shape is [batch, 1], so that can concat with previous ids
         idx = torch.cat((idx, next_id), dim=-1)
+        if next_id == end_of_text_id:
+            break
     return idx
     
